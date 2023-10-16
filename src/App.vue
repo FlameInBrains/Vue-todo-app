@@ -3,6 +3,13 @@
 
   export default {
     data() {
+      let todos = [];
+      const jsonData = localStorage.getItem('todos') || '[]';
+
+      try {
+        todos = JSON.parse(jsonData);
+      } catch (error) {}
+
       return {
         todos,
         title: '',
@@ -15,6 +22,14 @@
       completedTodos() {
         return this.todos.filter(todo => todo.completed);
       },
+    },
+    watch: {
+      todos: {
+        deep: true,
+        handler() {
+          localStorage.setItem('todos', JSON.stringify(this.todos));
+        }
+      }
     },
     methods: {
       handleSubmit() {
